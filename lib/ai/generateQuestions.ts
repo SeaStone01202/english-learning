@@ -5,8 +5,8 @@ export interface Question {
   type: "fill_blank" | "multiple_choice" | "writing" | "listening";
   question: string;
   options?: string[];
-  correctAnswer?: string;
-  explanation?: string;
+  correctAnswer: string;
+  explanation: string;
 }
 
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY!);
