@@ -10,6 +10,10 @@
   --error: #dc3545;
   --warning: #ffc107;
   --border: #e9ecef;
+  --card-bg: #f8f9fa;
+  --input-bg: #ffffff;
+  --secondary-text: #666666;
+  --table-header-bg: #e9ecef;
 }
 
 @theme inline {
@@ -24,6 +28,10 @@
     --background: #0a0a0a;
     --foreground: #ededed;
     --border: #333333;
+    --card-bg: #1a1a1a;
+    --input-bg: #2a2a2a;
+    --secondary-text: #a0a0a0;
+    --table-header-bg: #1a1a1a;
   }
 }
 
@@ -108,8 +116,8 @@ body {
 }
 
 .footer {
-  background: #f8f9fa;
-  color: #6c757d;
+  background: var(--card-bg);
+  color: var(--secondary-text);
   text-align: center;
   padding: 2rem;
   border-top: 1px solid var(--border);
@@ -137,14 +145,14 @@ body {
 }
 
 .page-description {
-  color: #666;
+  color: var(--secondary-text);
   margin-bottom: 2rem;
   font-size: 1rem;
 }
 
 /* Forms */
 .exercise-form {
-  background: #f8f9fa;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 8px;
   max-width: 600px;
@@ -170,7 +178,7 @@ body {
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
-  background: white;
+  background: var(--input-bg);
   color: var(--foreground);
   transition: border-color 0.3s ease;
 }
@@ -228,7 +236,7 @@ body {
 
 /* Questions */
 .question-item {
-  background: #f8f9fa;
+  background: var(--card-bg);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -249,7 +257,7 @@ body {
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
-  background: white;
+  background: var(--input-bg);
   color: var(--foreground);
 }
 
@@ -292,7 +300,7 @@ body {
   border-radius: 4px;
   font-size: 1rem;
   font-family: inherit;
-  background: white;
+  background: var(--input-bg);
   color: var(--foreground);
   resize: vertical;
 }
@@ -304,7 +312,7 @@ body {
 }
 
 .listening-note {
-  color: #666;
+  color: var(--secondary-text);
   font-size: 0.9rem;
   margin-bottom: 0.75rem;
   font-style: italic;
@@ -336,7 +344,7 @@ body {
 }
 
 .exercise-header p {
-  color: #666;
+  color: var(--secondary-text);
 }
 
 .questions-list {
@@ -384,7 +392,7 @@ body {
 }
 
 .result-item {
-  background: #f8f9fa;
+  background: var(--card-bg);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
   border-radius: 8px;
@@ -446,30 +454,30 @@ body {
 }
 
 .result-explanation {
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--card-bg);
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.95rem;
-  color: #666;
+  color: var(--secondary-text);
 }
 
 /* History */
 .history-list {
-  background: #f8f9fa;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
 }
 
 .empty-message {
   text-align: center;
-  color: #666;
+  color: var(--secondary-text);
   padding: 2rem;
   font-size: 1.1rem;
 }
 
 .loading-message {
   text-align: center;
-  color: #666;
+  color: var(--secondary-text);
   padding: 2rem;
   font-size: 1.1rem;
 }
@@ -480,7 +488,7 @@ body {
 }
 
 .history-table thead {
-  background: #e9ecef;
+  background: var(--table-header-bg);
   border-bottom: 2px solid var(--border);
 }
 
@@ -536,7 +544,7 @@ body {
 
 /* Settings */
 .settings-section {
-  background: #f8f9fa;
+  background: var(--card-bg);
   padding: 2rem;
   border-radius: 8px;
   max-width: 600px;
@@ -549,7 +557,7 @@ body {
 
 .help-text {
   margin-top: 0.5rem;
-  color: #666;
+  color: var(--secondary-text);
   font-size: 0.9rem;
 }
 
