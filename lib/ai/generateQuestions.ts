@@ -19,38 +19,51 @@ export async function generateQuestionsWithAI(
   topic: string,
 ): Promise<Question[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const systemInstruction = `You are an English teacher. Output ONLY a JSON array of 10 questions. 
+Schema: [{id:number, type:string, question:string, options:string[]|null, correctAnswer:string, explanation:string}]
+Types: fill_blank, multiple_choice, writing, listening.`;
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction,
+      generationConfig: {
+        responseMimeType: "application/json", // Request JSON response directly,
+        temperature: 0.4, // Add some creativity to the questions
+      },
+    });
 
-    const prompt = `Generate 10 English learning questions for ${skill} skill about the topic: "${topic}".
-Mix question types: fill_blank, multiple_choice, writing, and listening.
-    
-Return ONLY a valid JSON array (no markdown, no extra text) with this exact structure:
-[
-  {
-    "id": 1,
-    "type": "fill_blank",
-    "question": "She ___ (go) to school.",
-    "options": null,
-    "correctAnswer": "goes",
-    "explanation": "Use goes for third person singular."
-  },
-  {
-    "id": 2,
-    "type": "multiple_choice",
-    "question": "He ___ football.",
-    "options": ["play", "plays", "played"],
-    "correctAnswer": "plays",
-    "explanation": "Correct form for he/she/it."
-  },
-  ...more questions (total 10)
-]
+    //     const prompt = `Generate 10 English learning questions for ${skill} skill about the topic: "${topic}".
+    // Mix question types: fill_blank, multiple_choice, writing, and listening.
 
-Make sure:
-1. Each question has id (1-10), type, question, correctAnswer, explanation
-2. Multiple choice questions have options array with 3-4 options
-3. Writing/listening questions can have empty correctAnswer
-4. Mix different question types evenly
-5. Return ONLY the JSON array, nothing else`;
+    // Return ONLY a valid JSON array (no markdown, no extra text) with this exact structure:
+    // [
+    //   {
+    //     "id": 1,
+    //     "type": "fill_blank",
+    //     "question": "She ___ (go) to school.",
+    //     "options": null,
+    //     "correctAnswer": "goes",
+    //     "explanation": "Use goes for third person singular."
+    //   },
+    //   {
+    //     "id": 2,
+    //     "type": "multiple_choice",
+    //     "question": "He ___ football.",
+    //     "options": ["play", "plays", "played"],
+    //     "correctAnswer": "plays",
+    //     "explanation": "Correct form for he/she/it."
+    //   },
+    //   ...more questions (total 10)
+    // ]
+
+    // Make sure:
+    // 1. Each question has id (1-10), type, question, correctAnswer, explanation
+    // 2. Multiple choice questions have options array with 3-4 options
+    // 3. Writing/listening questions can have empty correctAnswer
+    // 4. Mix different question types evenly
+    // 5. Return ONLY the JSON array, nothing else`;
+    const prompt = `Topic: "${topic}", Skill: "${skill}". 
+Generate 10 mixed questions (evenly distributed types). 
+Ensure multiple_choice has 3-4 options.`;
 
     const result = await model.generateContent(prompt);
     const response = result.response;
@@ -58,23 +71,8 @@ Make sure:
 
     console.log("Gemini response:", text.substring(0, 200)); // Log first 200 chars
 
-    // Parse JSON response - handle both plain JSON and JSON in code blocks
-    let jsonMatch = text.match(/\[[\s\S]*\]/);
-
-    // If not found, try to find JSON within markdown code blocks
-    if (!jsonMatch) {
-      jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/);
-      if (jsonMatch) {
-        jsonMatch[0] = jsonMatch[1]; // Extract JSON from markdown
-      }
-    }
-
-    if (!jsonMatch) {
-      console.error("Could not find JSON in Gemini response");
-      throw new Error("Invalid response format from Gemini");
-    }
-
-    const questions: Question[] = JSON.parse(jsonMatch[0]);
+    // Response is already JSON due to responseMimeType
+    const questions: Question[] = JSON.parse(text);
     console.log("Successfully parsed questions:", questions.length);
     return questions;
   } catch (err) {
@@ -100,7 +98,16 @@ export async function checkAnswersWithAI(
   answers: Record<number, string>,
 ): Promise<CheckAnswerResult[]> {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    const systemInstruction = `You are an English teacher grading answers. Output ONLY a JSON array.
+ Schema: [{id:number, correct:boolean, correctAnswer:string, explanation:string}]`;
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+      systemInstruction,
+      generationConfig: {
+        responseMimeType: "application/json",
+        temperature: 0.3, // More consistent grading
+      },
+    });
 
     const questionsText = questions
       .map(
@@ -145,23 +152,8 @@ Return ONLY the JSON array, nothing else.`;
 
     console.log("Gemini check response:", text.substring(0, 200)); // Log first 200 chars
 
-    // Parse JSON response - handle both plain JSON and JSON in code blocks
-    let jsonMatch = text.match(/\[[\s\S]*\]/);
-
-    // If not found, try to find JSON within markdown code blocks
-    if (!jsonMatch) {
-      jsonMatch = text.match(/```json\n?([\s\S]*?)\n?```/);
-      if (jsonMatch) {
-        jsonMatch[0] = jsonMatch[1]; // Extract JSON from markdown
-      }
-    }
-
-    if (!jsonMatch) {
-      console.error("Could not find JSON in Gemini check response");
-      throw new Error("Invalid response format from Gemini");
-    }
-
-    const results: CheckAnswerResult[] = JSON.parse(jsonMatch[0]);
+    // Response is already JSON due to responseMimeType
+    const results: CheckAnswerResult[] = JSON.parse(text);
     console.log("Successfully parsed results:", results.length);
     return results;
   } catch (err) {
