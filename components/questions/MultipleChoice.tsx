@@ -24,7 +24,11 @@ export default function MultipleChoice({
               name={`question-${index}`}
               value={option}
               checked={value === option}
-              onChange={(e) => onChange(e.target.value)}
+              {/* onChange={(e) => onChange(e.target.value)} */}
+            onChange={(e) => {
+  console.log(e.target.value);
+  onChange(e.target.value);
+}}
               className="radio-input"
             />
             <span>{option}</span>
