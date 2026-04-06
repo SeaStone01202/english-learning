@@ -1,57 +1,59 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
-import "./globals.css";
+import type { Metadata, Viewport } from "next"
+import { Geist, Geist_Mono } from "next/font/google"
+import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { Header } from "@/components/header"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
-});
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
   title: "English Learning App",
   description: "Learn English with interactive exercises",
-};
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-screen flex flex-col">
-        <nav className="navbar">
-          <div className="nav-container">
-            <Link href="/" className="nav-brand">
-              📚 English Learning
-            </Link>
-            <div className="nav-links">
-              <Link href="/practice" className="nav-link">
-                Practice
-              </Link>
-              <Link href="/history" className="nav-link">
-                History
-              </Link>
-              <Link href="/settings" className="nav-link">
-                Settings
-              </Link>
-            </div>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+              {children}
+            </main>
+            <footer className="w-full border-t border-border bg-card py-8">
+              <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div className="text-center text-sm text-muted-foreground">
+                  <p>
+                    &copy; {new Date().getFullYear()} English Learning App. Keep
+                    practicing!
+                  </p>
+                </div>
+              </div>
+            </footer>
           </div>
-        </nav>
-        <main className="main-content">{children}</main>
-        <footer className="footer">
-          <p>&copy; 2026 English Learning App. Keep practicing!</p>
-        </footer>
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

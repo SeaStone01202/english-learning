@@ -1,10 +1,13 @@
-"use client";
+"use client"
+
+import { Card } from "@/components/ui/card"
+import { Label } from "@/components/ui/label"
 
 interface MultipleChoiceProps {
-  question: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
+  question: string
+  options: string[]
+  value: string
+  onChange: (value: string) => void
 }
 
 export default function MultipleChoice({
@@ -14,27 +17,29 @@ export default function MultipleChoice({
   onChange,
 }: MultipleChoiceProps) {
   return (
-    <div className="question-item">
-      <p className="question-text">{question}</p>
-      <div className="options-container">
+    <Card className="p-6 border-l-4 border-l-primary">
+      <p className="font-semibold text-base mb-4 text-foreground">{question}</p>
+      <div className="space-y-3">
         {options.map((option, index) => (
-          <label key={index} className="option-label">
+          <div key={index} className="flex items-center gap-3">
             <input
               type="radio"
-              name={`question-${index}`}
+              id={`option-${index}`}
+              name={`question-option`}
               value={option}
               checked={value === option}
-              {/* onChange={(e) => onChange(e.target.value)} */}
-            onChange={(e) => {
-  console.log(e.target.value);
-  onChange(e.target.value);
-}}
-              className="radio-input"
+              onChange={(e) => onChange(e.target.value)}
+              className="h-4 w-4 border border-input cursor-pointer"
             />
-            <span>{option}</span>
-          </label>
+            <Label
+              htmlFor={`option-${index}`}
+              className="flex-1 cursor-pointer font-normal text-foreground hover:text-primary transition-colors"
+            >
+              {option}
+            </Label>
+          </div>
         ))}
       </div>
-    </div>
-  );
+    </Card>
+  )
 }

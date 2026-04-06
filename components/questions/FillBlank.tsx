@@ -1,9 +1,12 @@
-"use client";
+"use client"
+
+import { Input } from "@/components/ui/input"
+import { Card } from "@/components/ui/card"
 
 interface FillBlankProps {
-  question: string;
-  value: string;
-  onChange: (value: string) => void;
+  question: string
+  value: string
+  onChange: (value: string) => void
 }
 
 export default function FillBlank({
@@ -12,15 +15,14 @@ export default function FillBlank({
   onChange,
 }: FillBlankProps) {
   return (
-    <div className="question-item">
-      <p className="question-text">{question}</p>
-      <input
+    <Card className="p-6 border-l-4 border-l-primary">
+      <p className="font-semibold text-base mb-4 text-foreground">{question}</p>
+      <Input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="Type your answer"
-        className="input-field"
+        placeholder="Type your answer here..."
       />
-    </div>
-  );
+    </Card>
+  )
 }
